@@ -43,32 +43,43 @@ class CurrencyTest extends TestCase
     /** @test */
     public function it_can_be_instantiated()
     {
-        $this->assertInstanceOf(Currency::class, $this->currency);
+        $this->assertCurrencyEntityInstance($this->currency);
     }
 
     /** @test */
     public function it_can_access_the_attributes()
     {
-        foreach ($this->getCurrencies() as $key => $attributes) {
-            $this->currency = new Currency($key, $attributes);
+        foreach ($this->getCurrenciesAttributes() as $key => $attributes) {
+            $this->assertCurrencyEntity($key, $attributes, new Currency($key, $attributes));
+        }
+    }
 
-            $this->assertSame($key,                               $this->currency->key);
-            $this->assertSame($attributes['iso_numeric'],         $this->currency->iso_numeric);
-            $this->assertSame($attributes['name'],                $this->currency->name);
-            $this->assertSame($attributes['symbol'],              $this->currency->symbol);
-            $this->assertSame($attributes['alternate_symbols'],   $this->currency->alternate_symbols);
-            $this->assertSame($attributes['subunit'],             $this->currency->subunit);
-            $this->assertSame($attributes['subunit_to_unit'],     $this->currency->subunit_to_unit);
-            $this->assertSame($attributes['symbol_first'],        $this->currency->symbol_first);
-            $this->assertSame($attributes['decimal_separator'],   $this->currency->decimal_separator);
-            $this->assertSame($attributes['thousands_separator'], $this->currency->thousands_separator);
+    /** @test */
+    public function it_can_make()
+    {
+        foreach ($this->getCurrenciesAttributes() as $key => $attributes) {
+            $this->assertCurrencyEntity($key, $attributes, Currency::make($key, $attributes));
+        }
+    }
+
+    /** @test */
+    public function it_can_convert_to_array()
+    {
+        foreach ($this->getCurrenciesAttributes() as $key => $attributes) {
+            $currency   = Currency::make($key, $attributes)->toArray();
+            $attributes = compact('key') + $attributes;
+
+            foreach ($attributes as $k => $v) {
+                $this->assertArrayHasKey($k, $currency);
+                $this->assertSame($v, $currency[$k]);
+            }
         }
     }
 
     /** @test */
     public function it_can_convert_to_json()
     {
-        foreach ($this->getCurrencies() as $key => $attributes) {
+        foreach ($this->getCurrenciesAttributes() as $key => $attributes) {
             $this->currency = new Currency($key, $attributes);
             $attributes     = compact('key') + $attributes;
 
@@ -77,50 +88,51 @@ class CurrencyTest extends TestCase
         }
     }
 
-    /* ------------------------------------------------------------------------------------------------
-     |  Other Functions
-     | ------------------------------------------------------------------------------------------------
-     */
-    /**
-     * @param  string  $iso
-     *
-     * @return array
-     */
-    private function getCurrencyAttributes($iso)
+    /** @test */
+    public function it_can_format()
     {
-        return array_get($this->getCurrencies(), $iso);
+        $expectations = [
+            'USD' => [
+                [
+                    'amount'   => 50000,
+                    'expected' => '$ 500.00'
+                ],[
+                    'amount'   => 100000,
+                    'expected' => '$ 1,000.00'
+                ]
+            ],
+            'EUR' => [
+                [
+                    'amount'   => 50000,
+                    'expected' => '€ 500,00'
+                ],[
+                    'amount'   => 100000,
+                    'expected' => '€ 1.000,00'
+                ]
+            ],
+        ];
+
+        foreach ($expectations as $iso => $expectation) {
+            $this->currency = $this->makeCurrency($iso);
+
+            foreach ($expectation as $data) {
+                $this->assertSame($data['expected'], $this->currency->format($data['amount']));
+            }
+        }
     }
 
     /**
-     * @return array
+     * @test
+     *
+     * @expectedException         \Arcanedev\Currencies\Exceptions\InvalidCurrencyArgumentException
+     * @expectedExceptionMessage  The Currency attributes are missing: [name, symbol, alternate_symbols, subunit, subunit_to_unit, symbol_first, html_entity]
      */
-    private function getCurrencies()
+    public function it_must_throw_an_invalid_currency_argument_exception_on_missing_attributes()
     {
-        return [
-            'EUR' => [
-                'iso_numeric'         => '978',
-                'name'                => 'Euro',
-                'symbol'              => '€',
-                'alternate_symbols'   => [],
-                'subunit'             => 'Cent',
-                'subunit_to_unit'     => 100,
-                'symbol_first'        => true,
-                'html_entity'         => '&#x20AC;',
-                'decimal_separator'   => ',',
-                'thousands_separator' => '.',
-            ],
-            'USD' => [
-                'iso_numeric'         => '840',
-                'name'                => 'United States Dollar',
-                'symbol'              => '$',
-                'alternate_symbols'   => ['US$'],
-                'subunit'             => 'Cent',
-                'subunit_to_unit'     => 100,
-                'symbol_first'        => true,
-                'html_entity'         => '$',
-                'decimal_separator'   => '.',
-                'thousands_separator' => ',',
-            ],
-        ];
+        Currency::make('ZZZ', [
+            'iso_numeric'         => '999',
+            'decimal_separator'   => ',',
+            'thousands_separator' => '.',
+        ]);
     }
 }
