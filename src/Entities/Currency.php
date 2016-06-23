@@ -2,6 +2,7 @@
 
 use Arcanedev\Currencies\Contracts\Entities\Currency as CurrencyContract;
 use Arcanedev\Currencies\Exceptions\InvalidCurrencyArgumentException;
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Support\Arr;
 
@@ -24,7 +25,7 @@ use Illuminate\Support\Arr;
  * @property  string  decimal_separator
  * @property  string  thousands_separator
  */
-class Currency implements CurrencyContract, Jsonable
+class Currency implements CurrencyContract, Arrayable, Jsonable
 {
     /* ------------------------------------------------------------------------------------------------
      |  Properties
@@ -36,16 +37,6 @@ class Currency implements CurrencyContract, Jsonable
      * @var array
      */
     protected $attributes = [];
-
-    /**
-     * Currency required attributes.
-     *
-     * @var array
-     */
-    protected $required = [
-        'key', 'iso_numeric', 'name', 'symbol', 'alternate_symbols', 'subunit', 'subunit_to_unit',
-        'symbol_first', 'html_entity', 'decimal_separator', 'thousands_separator',
-    ];
 
     /* ------------------------------------------------------------------------------------------------
      |  Constructor
@@ -80,10 +71,36 @@ class Currency implements CurrencyContract, Jsonable
         return Arr::get($this->attributes, $name);
     }
 
+    /**
+     * Get required attributes.
+     *
+     * @return array
+     */
+    protected function getRequiredAttributes()
+    {
+        return [
+            'key', 'iso_numeric', 'name', 'symbol', 'alternate_symbols', 'subunit', 'subunit_to_unit',
+            'symbol_first', 'html_entity', 'decimal_separator', 'thousands_separator',
+        ];
+    }
+
     /* ------------------------------------------------------------------------------------------------
      |  Main Functions
      | ------------------------------------------------------------------------------------------------
      */
+    /**
+     * Make a currency instance.
+     *
+     * @param  string  $key
+     * @param  array   $attributes
+     *
+     * @return self
+     */
+    public static function make($key, array $attributes)
+    {
+        return new self($key, $attributes);
+    }
+
     /**
      * Format the currency amount.
      *
@@ -107,6 +124,16 @@ class Currency implements CurrencyContract, Jsonable
     }
 
     /**
+     * Get the instance as an array.
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        return $this->attributes;
+    }
+
+    /**
      * Convert the object to its JSON representation.
      *
      * @param  int  $options
@@ -115,16 +142,23 @@ class Currency implements CurrencyContract, Jsonable
      */
     public function toJson($options = 0)
     {
-        return json_encode($this->attributes, $options);
+        return json_encode($this->toArray(), $options);
     }
 
     /* ------------------------------------------------------------------------------------------------
      |  Check Functions
      | ------------------------------------------------------------------------------------------------
      */
+    /**
+     * Check the required attributes.
+     *
+     * @param  array  $attributes
+     *
+     * @throws \Arcanedev\Currencies\Exceptions\InvalidCurrencyArgumentException
+     */
     private function checkRequiredAttributes(array $attributes)
     {
-        $missing = array_diff($this->required, array_keys($attributes));
+        $missing = array_diff($this->getRequiredAttributes(), array_keys($attributes));
 
         if ( ! empty($missing)) {
             throw new InvalidCurrencyArgumentException(
