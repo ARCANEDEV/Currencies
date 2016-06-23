@@ -2,6 +2,7 @@
 
 use Arcanedev\Currencies\Exceptions\CurrencyNotFoundException;
 use Arcanedev\Support\Collection;
+use Arcanedev\Currencies\Contracts\Entities\Currency as CurrencyContract;
 
 /**
  * Class     CurrencyCollection
@@ -35,27 +36,33 @@ class CurrencyCollection extends Collection
     }
 
     /**
-     * Add many currencies.
+     * Add a currency to the collection.
      *
-     * @param  array  $items
-     * @param  bool   $isIso
+     * @param  string  $key
+     * @param  array   $attributes
+     *
+     * @return self
      */
-    protected function loadMany($items, $isIso = false)
-    {
-        foreach ($items as $key => $currency) {
-            $key      = strtoupper($key);
-            $currency = [
-                'key'    => $key,
-                'is_iso' => $isIso,
-            ] + $currency;
-
-            $this->add($key, $currency);
-        }
-    }
-
     public function add($key, array $attributes)
     {
-        $this->put($key, new Currency($key, $attributes));
+        $key        = strtoupper($key);
+        $attributes = compact('key') + $attributes;
+
+        $this->addOne(Currency::make($key, $attributes));
+
+        return $this;
+    }
+
+    /**
+     * Add a Currency object to the collection.
+     *
+     * @param  \Arcanedev\Currencies\Contracts\Entities\Currency  $currency
+     *
+     * @return self
+     */
+    public function addOne(CurrencyContract $currency)
+    {
+        $this->put($currency->key, $currency);
 
         return $this;
     }
@@ -74,11 +81,28 @@ class CurrencyCollection extends Collection
         $iso = strtoupper($iso);
 
         if ( ! $this->has($iso)) {
-            throw new CurrencyNotFoundException(
-                "The Currency with ISO [$iso] not found"
-            );
+            throw new CurrencyNotFoundException("The Currency with the ISO code [$iso] not found");
         }
 
         return $this->get($iso);
+    }
+
+    /* ------------------------------------------------------------------------------------------------
+     |  Other Functions
+     | ------------------------------------------------------------------------------------------------
+     */
+    /**
+     * Add many currencies.
+     *
+     * @param  array  $items
+     * @param  bool   $isIso
+     */
+    protected function loadMany($items, $isIso = false)
+    {
+        foreach ($items as $key => $attributes) {
+            $attributes = ['is_iso' => $isIso] + $attributes;
+
+            $this->add($key, $attributes);
+        }
     }
 }
