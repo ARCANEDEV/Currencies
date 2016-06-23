@@ -49,7 +49,7 @@ If you discover any security related issues, please email arcanedev.maroc@gmail.
 [badge_hhvm]:         https://img.shields.io/hhvm/arcanedev/currencies.svg?style=flat-square
 [badge_coverage]:     https://img.shields.io/scrutinizer/coverage/g/ARCANEDEV/Currencies.svg?style=flat-square
 [badge_quality]:      https://img.shields.io/scrutinizer/g/ARCANEDEV/Currencies.svg?style=flat-square
-[badge_insight]:      https://img.shields.io/sensiolabs/i/[id].svg?style=flat-square
+[badge_insight]:      https://img.shields.io/sensiolabs/i/49fdfa83-4d5e-473f-8b9b-26cfbbbefa92.svg?style=flat-square
 [badge_issues]:       https://img.shields.io/github/issues/ARCANEDEV/Currencies.svg?style=flat-square
 [badge_package]:      https://img.shields.io/badge/package-arcanedev/currencies-blue.svg?style=flat-square
 [badge_release]:      https://img.shields.io/packagist/v/arcanedev/currencies.svg?style=flat-square
@@ -63,4 +63,4 @@ If you discover any security related issues, please email arcanedev.maroc@gmail.
 [link-travis]:        https://travis-ci.org/ARCANEDEV/Currencies
 [link-hhvm]:          http://hhvm.h4cc.de/package/arcanedev/currencies
 [link-scrutinizer]:   https://scrutinizer-ci.com/g/ARCANEDEV/Currencies/?branch=master
-[link-insight]:       https://insight.sensiolabs.com/projects/[id]
+[link-insight]:       https://insight.sensiolabs.com/projects/49fdfa83-4d5e-473f-8b9b-26cfbbbefa92
