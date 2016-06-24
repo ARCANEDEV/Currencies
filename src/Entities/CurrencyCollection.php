@@ -1,8 +1,8 @@
 <?php namespace Arcanedev\Currencies\Entities;
 
+use Arcanedev\Currencies\Contracts\Entities\Currency as CurrencyContract;
 use Arcanedev\Currencies\Exceptions\CurrencyNotFoundException;
 use Arcanedev\Support\Collection;
-use Arcanedev\Currencies\Contracts\Entities\Currency as CurrencyContract;
 
 /**
  * Class     CurrencyCollection
