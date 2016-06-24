@@ -17,6 +17,21 @@ class CurrencyCollection extends Collection
      | ------------------------------------------------------------------------------------------------
      */
     /**
+     * Get a currency from the collection by iso code.
+     *
+     * @param  string      $iso
+     * @param  mixed|null  $default
+     *
+     * @return \Arcanedev\Currencies\Entities\Currency
+     */
+    public function get($iso, $default = null)
+    {
+        return parent::get($iso, $default);
+    }
+
+    /**
+     * Load the currencies.
+     *
      * @param  array  $currencies
      * @param  bool   $includeNonIso
      *
@@ -48,9 +63,7 @@ class CurrencyCollection extends Collection
         $key        = strtoupper($key);
         $attributes = compact('key') + $attributes;
 
-        $this->addOne(Currency::make($key, $attributes));
-
-        return $this;
+        return $this->addOne(Currency::make($key, $attributes));
     }
 
     /**

@@ -13,31 +13,64 @@ interface CurrencyManager
      | ------------------------------------------------------------------------------------------------
      */
     /**
+     * Get the default currency iso code.
+     *
+     * @return string
+     */
+    public function getDefault();
+
+    /**
      * Get the default currency entity.
      *
      * @return \Arcanedev\Currencies\Entities\Currency
      */
     public function getDefaultCurrency();
 
+    /**
+     * Get supported currencies (iso codes).
+     *
+     * @return array
+     */
+    public function getSupported();
+
+    /**
+     * Get the currencies collection.
+     *
+     * @return \Arcanedev\Currencies\Entities\CurrencyCollection
+     */
+    public function currencies();
+
     /* ------------------------------------------------------------------------------------------------
      |  Main Functions
      | ------------------------------------------------------------------------------------------------
      */
     /**
-     * Get a currency by ISO.
+     * Get a currency from the collection by iso code.
+     *
+     * @param  string      $iso
+     * @param  mixed|null  $default
+     *
+     * @return \Arcanedev\Currencies\Entities\Currency
+     */
+    public function get($iso, $default = null);
+
+    /**
+     * Get a currency or fail if not exists.
      *
      * @param  string  $iso
      *
      * @return \Arcanedev\Currencies\Entities\Currency
+     *
+     * @throws \Arcanedev\Currencies\Exceptions\CurrencyNotFoundException
      */
-    public function get($iso);
+    public function findOrFail($iso);
 
     /**
-     * Get all currencies.
+     * Get the supported currencies collection.
      *
-     * @return array
+     * @return \Arcanedev\Currencies\Entities\CurrencyCollection
      */
-    public function allCurrencies();
+    public function getSupportedCurrencies();
 
     /**
      * Load the currencies.
