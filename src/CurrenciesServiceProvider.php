@@ -55,16 +55,18 @@ class CurrenciesServiceProvider extends PackageServiceProvider
      */
     /**
      * Register the service provider.
-     *
-     * @return void
      */
     public function register()
     {
         $this->registerConfig();
 
         $this->registerCurrencyManager();
+        $this->registerCurrencyConverter();
     }
 
+    /**
+     * Boot the service provider.
+     */
     public function boot()
     {
         parent::boot();
@@ -85,6 +87,8 @@ class CurrenciesServiceProvider extends PackageServiceProvider
         return [
             'arcanedev.currencies.manager',
             Contracts\CurrencyManager::class,
+            'arcanedev.currencies.converter',
+            Contracts\ConverterManager::class,
         ];
     }
 
@@ -98,12 +102,19 @@ class CurrenciesServiceProvider extends PackageServiceProvider
             /** @var \Illuminate\Contracts\Config\Repository $config */
             $config  = $app['config'];
 
-            return new CurrencyManager(
-                $config->get('currencies')
-            );
+            return new CurrencyManager($config->get('currencies'));
         });
 
         $this->app->bind(Contracts\CurrencyManager::class, 'arcanedev.currencies.manager');
+    }
+
+    private function registerCurrencyConverter()
+    {
+        $this->singleton('arcanedev.currencies.converter', function ($app) {
+            return new ConverterManager($app);
+        });
+
+        $this->app->bind(Contracts\ConverterManager::class, 'arcanedev.currencies.converter');
     }
 
     private function loadCurrencies()
