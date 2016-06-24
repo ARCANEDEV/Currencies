@@ -9,7 +9,7 @@ return [
 
     'supported'       => ['USD', 'EUR'],
 
-    'include-non-iso' => false,
+    'include-non-iso' => true,
 
     /* ------------------------------------------------------------------------------------------------
      |  Converters
@@ -20,11 +20,16 @@ return [
 
         'providers' => [
             'openexchangerates' => [
-                'api-id' => env('OPENEXCHANGERATES_API_ID'),
+                'api-id'   => env('OPENEXCHANGERATES_API_ID'),
+                'pro-plan' => false,
             ],
         ],
 
-        'cache'     => null,
+        'cache'     => [
+            'enabled'  => true,
+            'key'      => 'currencies.rates',
+            'duration' => 24 * 60, // 24 Hours
+        ],
     ],
 
     /* ------------------------------------------------------------------------------------------------
@@ -525,6 +530,18 @@ return [
                 'decimal_separator'   => '.',
                 'thousands_separator' => ',',
             ],
+            'EEK' => [
+                'iso_numeric'         => '233',
+                'name'                => 'Estonian Kroon',
+                'symbol'              => 'kr',
+                'alternate_symbols'   => ['KR'],
+                'subunit'             => 'Senti',
+                'subunit_to_unit'     => 100,
+                'symbol_first'        => true,
+                'html_entity'         => '',
+                'decimal_separator'   => '.',
+                'thousands_separator' => ',',
+            ],
             'EGP' => [
                 'iso_numeric'         => '818',
                 'name'                => 'Egyptian Pound',
@@ -615,6 +632,18 @@ return [
                 'symbol'              => 'ლ',
                 'alternate_symbols'   => ['lari'],
                 'subunit'             => 'Tetri',
+                'subunit_to_unit'     => 100,
+                'symbol_first'        => false,
+                'html_entity'         => '',
+                'decimal_separator'   => '.',
+                'thousands_separator' => ',',
+            ],
+            'GGP' => [
+                'iso_numeric'         => null,
+                'name'                => 'Guernsey pound',
+                'symbol'              => '£',
+                'alternate_symbols'   => [],
+                'subunit'             => 'Pence',
                 'subunit_to_unit'     => 100,
                 'symbol_first'        => false,
                 'html_entity'         => '',
@@ -774,6 +803,18 @@ return [
                 'subunit_to_unit'     => 100,
                 'symbol_first'        => true,
                 'html_entity'         => '&#x20AA;',
+                'decimal_separator'   => '.',
+                'thousands_separator' => ',',
+            ],
+            'IMP' => [
+                'iso_numeric'         => null,
+                'name'                => 'Manx pound',
+                'symbol'              => '£',
+                'alternate_symbols'   => ['M£'],
+                'subunit'             => 'Pence',
+                'subunit_to_unit'     => 100,
+                'symbol_first'        => true,
+                'html_entity'         => '',
                 'decimal_separator'   => '.',
                 'thousands_separator' => ',',
             ],
@@ -1156,6 +1197,18 @@ return [
                 'alternate_symbols'   => [],
                 'subunit'             => 'Khoums',
                 'subunit_to_unit'     => 5,
+                'symbol_first'        => false,
+                'html_entity'         => '',
+                'decimal_separator'   => '.',
+                'thousands_separator' => ',',
+            ],
+            'MTL' => [
+                'iso_numeric'         => '470',
+                'name'                => 'Maltese lira',
+                'symbol'              => 'Lm',
+                'alternate_symbols'   => ['₤'],
+                'subunit'             => 'Cent',
+                'subunit_to_unit'     => 100,
                 'symbol_first'        => false,
                 'html_entity'         => '',
                 'decimal_separator'   => '.',
@@ -2001,6 +2054,18 @@ return [
                 'decimal_separator'   => '.',
                 'thousands_separator' => ',',
             ],
+            'ZWL' => [
+                'iso_numeric'         => '967',
+                'name'                => 'Zimbabwean dollar',
+                'symbol'              => '$',
+                'alternate_symbols'   => ['Z$'],
+                'subunit'             => 'cent',
+                'subunit_to_unit'     => 100,
+                'symbol_first'        => false,
+                'html_entity'         => '',
+                'decimal_separator'   => '.',
+                'thousands_separator' => ',',
+            ],
         ],
         'non-iso' => [
             'BTC' => [
@@ -2024,6 +2089,30 @@ return [
                 'subunit_to_unit'     => 100,
                 'symbol_first'        => true,
                 'html_entity'         => '&#x00A3;',
+                'decimal_separator'   => '.',
+                'thousands_separator' => ',',
+            ],
+            'XPD' => [
+                'iso_numeric'         => '964',
+                'name'                => 'Palladium',
+                'symbol'              => 'XPD',
+                'alternate_symbols'   => [],
+                'subunit'             => 'ounce',
+                'subunit_to_unit'     => 1,
+                'symbol_first'        => false,
+                'html_entity'         => '',
+                'decimal_separator'   => '.',
+                'thousands_separator' => ',',
+            ],
+            'XPT' => [
+                'iso_numeric'         => '962',
+                'name'                => 'Platinum',
+                'symbol'              => 'XPD',
+                'alternate_symbols'   => [],
+                'subunit'             => 'ounce',
+                'subunit_to_unit'     => 1,
+                'symbol_first'        => false,
+                'html_entity'         => '',
                 'decimal_separator'   => '.',
                 'thousands_separator' => ',',
             ],
