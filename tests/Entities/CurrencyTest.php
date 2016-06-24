@@ -121,6 +121,27 @@ class CurrencyTest extends TestCase
         }
     }
 
+    /** @test */
+    public function it_can_access_currency_as_an_array()
+    {
+        foreach ($this->getCurrenciesAttributes() as $key => $attributes) {
+            $this->currency = Currency::make($key, $attributes);
+
+            foreach ($attributes as $k => $v) {
+                $this->assertArrayHasKey($k, $this->currency);
+                $this->assertSame($v, $this->currency[$k]);
+
+                // Check does not effect the object
+                $this->currency[$k] = null;
+                $this->assertSame($v, $this->currency[$k]);
+
+                unset($this->currency[$k]);
+                $this->assertArrayHasKey($k, $this->currency);
+                $this->assertSame($v, $this->currency[$k]);
+            }
+        }
+    }
+
     /**
      * @test
      *
