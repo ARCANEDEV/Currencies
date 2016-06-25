@@ -60,6 +60,8 @@ class CurrenciesServiceProviderTest extends TestCase
         $expected = [
             'arcanedev.currencies.manager',
             \Arcanedev\Currencies\Contracts\CurrencyManager::class,
+            'arcanedev.currencies.converter',
+            \Arcanedev\Currencies\Contracts\ConverterManager::class,
         ];
 
         $this->assertSame($expected, $this->provider->provides());

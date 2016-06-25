@@ -2,6 +2,7 @@
 
 use Arcanedev\Currencies\Contracts\Entities\Currency as CurrencyContract;
 use Arcanedev\Currencies\Exceptions\InvalidCurrencyArgumentException;
+use ArrayAccess;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Support\Arr;
@@ -25,7 +26,7 @@ use Illuminate\Support\Arr;
  * @property  string  decimal_separator
  * @property  string  thousands_separator
  */
-class Currency implements CurrencyContract, Arrayable, Jsonable
+class Currency implements CurrencyContract, Arrayable, ArrayAccess, Jsonable
 {
     /* ------------------------------------------------------------------------------------------------
      |  Properties
@@ -166,4 +167,47 @@ class Currency implements CurrencyContract, Arrayable, Jsonable
             );
         }
     }
+
+    /**
+     * Whether a offset exists
+     * @link http://php.net/manual/en/arrayaccess.offsetexists.php
+     *
+     * @param  string  $offset
+     *
+     * @return bool
+     */
+    public function offsetExists($offset)
+    {
+        return Arr::has($this->attributes, $offset);
+    }
+
+    /**
+     * Offset to retrieve
+     * @link http://php.net/manual/en/arrayaccess.offsetget.php
+     *
+     * @param  string  $offset
+     *
+     * @return mixed
+     */
+    public function offsetGet($offset)
+    {
+        return Arr::get($this->attributes, $offset, null);
+    }
+
+    /**
+     * Offset to set
+     * @link http://php.net/manual/en/arrayaccess.offsetset.php
+     *
+     * @param  string  $offset
+     * @param  mixed   $value
+     */
+    public function offsetSet($offset, $value) { /** DO NOTHING **/ }
+
+    /**
+     * Offset to unset
+     * @link http://php.net/manual/en/arrayaccess.offsetunset.php
+     *
+     * @param string $offset
+     */
+    public function offsetUnset($offset) { /** DO NOTHING **/ }
 }
