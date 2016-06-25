@@ -110,6 +110,20 @@ class CurrencyManager implements CurrencyManagerContract
      | ------------------------------------------------------------------------------------------------
      */
     /**
+     * Load the currencies.
+     *
+     * @param  array  $currencies
+     *
+     * @return self
+     */
+    public function load(array $currencies)
+    {
+        $this->currencies()->load($currencies, $this->nonIsoIncluded);
+
+        return $this;
+    }
+
+    /**
      * Get a currency from the collection by iso code.
      *
      * @param  string      $iso
@@ -152,20 +166,6 @@ class CurrencyManager implements CurrencyManagerContract
     }
 
     /**
-     * Load the currencies.
-     *
-     * @param  array  $currencies
-     *
-     * @return self
-     */
-    public function load(array $currencies)
-    {
-        $this->currencies()->load($currencies, $this->nonIsoIncluded);
-
-        return $this;
-    }
-
-    /**
      * Format the amount.
      *
      * @param  string  $iso
@@ -178,9 +178,19 @@ class CurrencyManager implements CurrencyManagerContract
      */
     public function format($iso, $amount, $decimals = 2)
     {
-        return $this->currencies()
-            ->findOrFails($iso)
-            ->format($amount, $decimals);
+        return $this->findOrFail($iso)->format($amount, $decimals);
+    }
+
+    /**
+     * Get the currency symbol by iso code.
+     *
+     * @param  string  $iso
+     *
+     * @return string
+     */
+    public function symbol($iso)
+    {
+        return $this->findOrFail($iso)->symbol;
     }
 
     /* ------------------------------------------------------------------------------------------------

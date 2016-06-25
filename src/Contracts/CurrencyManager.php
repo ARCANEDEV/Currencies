@@ -45,6 +45,15 @@ interface CurrencyManager
      | ------------------------------------------------------------------------------------------------
      */
     /**
+     * Load the currencies.
+     *
+     * @param  array  $currencies
+     *
+     * @return self
+     */
+    public function load(array $currencies);
+
+    /**
      * Get a currency from the collection by iso code.
      *
      * @param  string      $iso
@@ -73,15 +82,6 @@ interface CurrencyManager
     public function getSupportedCurrencies();
 
     /**
-     * Load the currencies.
-     *
-     * @param  array  $currencies
-     *
-     * @return self
-     */
-    public function load(array $currencies);
-
-    /**
      * Format the amount.
      *
      * @param  string  $iso
@@ -91,6 +91,15 @@ interface CurrencyManager
      * @return string
      */
     public function format($iso, $amount, $decimals = 2);
+
+    /**
+     * Get the currency symbol by iso code.
+     *
+     * @param  string  $iso
+     *
+     * @return string
+     */
+    public function symbol($iso);
 
     /* ------------------------------------------------------------------------------------------------
      |  Check Functions

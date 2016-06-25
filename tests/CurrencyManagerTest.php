@@ -108,4 +108,14 @@ class CurrencyManagerTest extends TestCase
     {
         $this->manager->findOrFail('ZZZ');
     }
+
+    /** @test */
+    public function it_can_get_currency_symbol()
+    {
+        $currencies = $this->manager->currencies();
+
+        foreach ($currencies as $iso => $currency) {
+            $this->assertSame($currency->symbol, $this->manager->symbol($iso));
+        }
+    }
 }
