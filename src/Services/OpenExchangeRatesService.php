@@ -67,6 +67,16 @@ class OpenExchangeRatesService extends AbstractService
         return $this->apiId;
     }
 
+    /**
+     * Get cache key.
+     *
+     * @return string
+     */
+    protected function getCacheKey()
+    {
+        return parent::getCacheKey() . '.openexchangerates';
+    }
+
     /* ------------------------------------------------------------------------------------------------
      |  Main Functions
      | ------------------------------------------------------------------------------------------------
