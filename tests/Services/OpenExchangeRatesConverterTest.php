@@ -1,13 +1,13 @@
-<?php namespace Arcanedev\Currencies\Tests\Converters;
+<?php namespace Arcanedev\Currencies\Tests\Services;
 
-use Arcanedev\Currencies\Converters\OpenExchangeRatesConverter;
+use Arcanedev\Currencies\Services\OpenExchangeRatesService;
 use Arcanedev\Currencies\Tests\TestCase;
 use Prophecy\Argument;
 
 /**
  * Class     OpenExchangeRatesConverterTest
  *
- * @package  Arcanedev\Currencies\Tests\Converters
+ * @package  Arcanedev\Currencies\Tests\Services
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
 class OpenExchangeRatesConverterTest extends TestCase
@@ -17,7 +17,7 @@ class OpenExchangeRatesConverterTest extends TestCase
      | ------------------------------------------------------------------------------------------------
      */
     /**
-     * @var \Arcanedev\Currencies\Contracts\CurrencyConverter
+     * @var \Arcanedev\Currencies\Contracts\Services\CurrencyService
      */
     protected $converter;
 
@@ -30,7 +30,7 @@ class OpenExchangeRatesConverterTest extends TestCase
         parent::setUp();
 
         $client = $this->mockHttpClient();
-        $this->converter = new OpenExchangeRatesConverter(
+        $this->converter = new OpenExchangeRatesService(
             $client->reveal(),
             $this->app['cache']->driver(),
             ['api-id' => 'YOUR_API_ID_HERE']
@@ -52,9 +52,9 @@ class OpenExchangeRatesConverterTest extends TestCase
     public function it_can_be_instantiated()
     {
         $expectations = [
-            \Arcanedev\Currencies\Contracts\CurrencyConverter::class,
-            \Arcanedev\Currencies\Converters\AbstractConverter::class,
-            \Arcanedev\Currencies\Converters\OpenExchangeRatesConverter::class,
+            \Arcanedev\Currencies\Contracts\Services\CurrencyService::class,
+            \Arcanedev\Currencies\Services\AbstractService::class,
+            \Arcanedev\Currencies\Services\OpenExchangeRatesService::class,
         ];
 
         foreach ($expectations as $expected) {
@@ -85,10 +85,11 @@ class OpenExchangeRatesConverterTest extends TestCase
     private function mockHttpClient()
     {
         $client = $this->prophesize(\Arcanedev\Currencies\Contracts\Http\Client::class);
-        $client->get(Argument::type('string'))
+        $client->get(Argument::type('string'), Argument::type('array'))
             ->willReturn(json_encode([
                 'rates' => $this->getDummyRatesFrom('USD'),
             ]));
+        $client->setBaseUrl(Argument::type('string'))->shouldBeCalled();
 
         return $client;
     }

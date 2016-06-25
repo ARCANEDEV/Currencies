@@ -1,17 +1,19 @@
-<?php namespace Arcanedev\Currencies\Converters;
+<?php namespace Arcanedev\Currencies\Services;
 
-use Arcanedev\Currencies\Contracts\CurrencyConverter;
 use Arcanedev\Currencies\Contracts\Http\Client as ClientContract;
+use Arcanedev\Currencies\Contracts\Services\CurrencyService;
+use Arcanedev\Currencies\Entities\RateCollection;
+use Closure;
 use Illuminate\Contracts\Cache\Repository as CacheContract;
 use Illuminate\Support\Arr;
 
 /**
- * Class     AbstractConverter
+ * Class     AbstractService
  *
- * @package  Arcanedev\Currencies\Converters
+ * @package  Arcanedev\Currencies\Services
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-abstract class AbstractConverter implements CurrencyConverter
+abstract class AbstractService implements CurrencyService
 {
     /* ------------------------------------------------------------------------------------------------
      |  Properties
@@ -62,7 +64,7 @@ abstract class AbstractConverter implements CurrencyConverter
      | ------------------------------------------------------------------------------------------------
      */
     /**
-     * AbstractConverter constructor.
+     * AbstractService constructor.
      *
      * @param  \Arcanedev\Currencies\Contracts\Http\Client  $client
      * @param  \Illuminate\Contracts\Cache\Repository       $cache
@@ -74,22 +76,14 @@ abstract class AbstractConverter implements CurrencyConverter
         $this->cache  = $cache;
         $this->setCacheConfigs($configs);
         $this->setProviderConfigs($configs);
+
+        $this->client->setBaseUrl($this->baseUrl);
     }
 
     /* ------------------------------------------------------------------------------------------------
      |  Getters & Setters
      | ------------------------------------------------------------------------------------------------
      */
-    /**
-     * Get the base URL.
-     *
-     * @return string
-     */
-    public function getBaseUrl()
-    {
-        return $this->baseUrl;
-    }
-
     /**
      * Get the default currency.
      *
@@ -111,6 +105,41 @@ abstract class AbstractConverter implements CurrencyConverter
     }
 
     /**
+     * Get the `from` currency.
+     *
+     * @param  string  $from
+     *
+     * @return string
+     */
+    protected function getFromCurrency($from)
+    {
+        if (is_null($from)) {
+            $from = $this->getDefaultCurrency();
+        }
+
+        return $from;
+    }
+
+    /**
+     * Get the `to` currencies.
+     *
+     * @param  array|string|null  $to
+     *
+     * @return array
+     */
+    protected function getToCurrencies($to)
+    {
+        if (is_null($to)) {
+            return array_diff(
+                $this->getSupportedCurrencies(),
+                [$this->getDefaultCurrency()]
+            );
+        }
+
+        return $to;
+    }
+
+    /**
      * Set the cache configs.
      *
      * @param  array  $configs
@@ -126,10 +155,18 @@ abstract class AbstractConverter implements CurrencyConverter
      * Set the configs.
      *
      * @param  array  $configs
-     *
-     * @return mixed
      */
     abstract protected function setProviderConfigs(array $configs);
+
+    /**
+     * Get cache key.
+     *
+     * @return string
+     */
+    protected function getCacheKey()
+    {
+        return $this->cacheKey;
+    }
 
     /**
      * Check if cache is enabled.
@@ -145,4 +182,67 @@ abstract class AbstractConverter implements CurrencyConverter
      |  Main Functions
      | ------------------------------------------------------------------------------------------------
      */
+    /**
+     * Get currencies rates.
+     *
+     * @param  string|null        $from
+     * @param  array|string|null  $to
+     *
+     * @return \Arcanedev\Currencies\Entities\RateCollection
+     */
+    public function rates($from = null, $to = null)
+    {
+        $from = $this->getFromCurrency($from);
+        $to   = $this->getToCurrencies($to);
+
+        $self     = $this;
+        $callback = function () use ($self, $from, $to) {
+            return $self->request($from, $to);
+        };
+
+        $rates = $this->isCacheEnabled()
+            ? $this->cacheResults($callback)
+            : call_user_func($callback);
+
+        return $this->prepareRates($from, $rates);
+    }
+
+    /**
+     * Make an API request.
+     *
+     * @param  string  $from
+     * @param  array   $to
+     *
+     * @return \Arcanedev\Currencies\Entities\RateCollection
+     */
+    abstract protected function request($from, array $to);
+
+    /**
+     * Cache results.
+     *
+     * @param  Closure  $callback
+     *
+     * @return array
+     */
+    private function cacheResults(Closure $callback)
+    {
+        return $this->cache->remember(
+            $this->getCacheKey(),
+            $this->cacheDuration,
+            $callback
+        );
+    }
+
+    /**
+     * Prepare rates collection.
+     *
+     * @param  string  $from
+     * @param  array   $rates
+     *
+     * @return \Arcanedev\Currencies\Entities\RateCollection
+     */
+    protected function prepareRates($from, array $rates)
+    {
+        return RateCollection::make()->load($from, $rates);
+    }
 }
