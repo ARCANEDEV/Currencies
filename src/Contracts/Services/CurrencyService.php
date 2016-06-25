@@ -1,12 +1,12 @@
-<?php namespace Arcanedev\Currencies\Contracts;
+<?php namespace Arcanedev\Currencies\Contracts\Services;
 
 /**
- * Interface  CurrencyConverter
+ * Interface  CurrencyService
  *
- * @package   Arcanedev\Currencies\Contracts
+ * @package   Arcanedev\Currencies\Contracts\Services
  * @author    ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-interface CurrencyConverter
+interface CurrencyService
 {
     /* ------------------------------------------------------------------------------------------------
      |  Main Functions

@@ -17,7 +17,7 @@ interface ConverterManager
      *
      * @param  string  $driver
      *
-     * @return \Arcanedev\Currencies\Contracts\CurrencyConverter
+     * @return \Arcanedev\Currencies\Contracts\Services\CurrencyService
      */
     public function driver($driver = null);
 }
