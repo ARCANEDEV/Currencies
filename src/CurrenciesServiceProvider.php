@@ -62,6 +62,8 @@ class CurrenciesServiceProvider extends PackageServiceProvider
 
         $this->registerCurrencyManager();
         $this->registerCurrencyConverter();
+
+        $this->app->register(Validators\ValidationServiceProvider::class);
     }
 
     /**
@@ -75,6 +77,7 @@ class CurrenciesServiceProvider extends PackageServiceProvider
 
         // Publishes
         $this->publishConfig();
+        $this->publishTranslations();
     }
 
     /**
