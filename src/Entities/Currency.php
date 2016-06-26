@@ -105,15 +105,15 @@ class Currency implements CurrencyContract, Arrayable, ArrayAccess, Jsonable
     /**
      * Format the currency amount.
      *
-     * @param  int  $amount    -  Amount in cents
-     * @param  int  $decimals
+     * @param  double|int  $amount
+     * @param  int         $decimals
      *
      * @return string
      */
     public function format($amount, $decimals = 2)
     {
         $formatted = number_format(
-            $amount / $this->subunit_to_unit,
+            $amount,
             $decimals,
             $this->decimal_separator,
             $this->thousands_separator

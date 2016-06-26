@@ -34,6 +34,13 @@ interface CurrencyManager
     public function getSupported();
 
     /**
+     * Check if non ISO Currencies included.
+     *
+     * @return bool
+     */
+    public function isNonIsoIncluded();
+
+    /**
      * Get the currencies collection.
      *
      * @return \Arcanedev\Currencies\Entities\CurrencyCollection
@@ -59,7 +66,7 @@ interface CurrencyManager
      * @param  string      $iso
      * @param  mixed|null  $default
      *
-     * @return \Arcanedev\Currencies\Entities\Currency
+     * @return \Arcanedev\Currencies\Contracts\Entities\Currency
      */
     public function get($iso, $default = null);
 
@@ -84,9 +91,9 @@ interface CurrencyManager
     /**
      * Format the amount.
      *
-     * @param  string  $iso
-     * @param  int     $amount
-     * @param  int     $decimals
+     * @param  string      $iso
+     * @param  double|int  $amount
+     * @param  int         $decimals
      *
      * @return string
      */
@@ -100,15 +107,4 @@ interface CurrencyManager
      * @return string
      */
     public function symbol($iso);
-
-    /* ------------------------------------------------------------------------------------------------
-     |  Check Functions
-     | ------------------------------------------------------------------------------------------------
-     */
-    /**
-     * Check if non ISO Currencies included.
-     *
-     * @return bool
-     */
-    public function isNonIsoIncluded();
 }
