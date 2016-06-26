@@ -16,7 +16,7 @@ class ConverterManager extends Manager implements ConverterManagerContract
      | ------------------------------------------------------------------------------------------------
      */
     /**
-     * Create an instance of the specified driver.
+     * Create an instance of Openexchangerates service.
      *
      * @return \Arcanedev\Currencies\Contracts\Services\CurrencyService
      */
@@ -25,6 +25,19 @@ class ConverterManager extends Manager implements ConverterManagerContract
         return $this->buildProvider(
             Services\OpenExchangeRatesService::class,
             $this->getProviderConfigs('openexchangerates')
+        );
+    }
+
+    /**
+     * Create an instance of Currencylayer service.
+     *
+     * @return \Arcanedev\Currencies\Contracts\Services\CurrencyService
+     */
+    protected function createCurrencylayerDriver()
+    {
+        return $this->buildProvider(
+            Services\CurrencyLayerService::class,
+            $this->getProviderConfigs('currencylayer')
         );
     }
 
