@@ -1,20 +1,21 @@
-<?php namespace Arcanedev\Currencies\Tests;
+<?php namespace Arcanedev\Currencies\Tests\Providers;
 
-use Arcanedev\Currencies\CurrenciesServiceProvider;
+use Arcanedev\Currencies\Providers\ManagerServiceProvider;
+use Arcanedev\Currencies\Tests\TestCase;
 
 /**
- * Class     CurrenciesServiceProviderTest
+ * Class     ManagerServiceProviderTest
  *
- * @package  Arcanedev\Currencies\Tests
+ * @package  Arcanedev\Currencies\Tests\Providers
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class CurrenciesServiceProviderTest extends TestCase
+class ManagerServiceProviderTest extends TestCase
 {
     /* ------------------------------------------------------------------------------------------------
      |  Properties
      | ------------------------------------------------------------------------------------------------
      */
-    /** @var  \Arcanedev\Currencies\CurrenciesServiceProvider */
+    /** @var  \Arcanedev\Currencies\Providers\ManagerServiceProvider */
     private $provider;
 
     /* ------------------------------------------------------------------------------------------------
@@ -25,7 +26,7 @@ class CurrenciesServiceProviderTest extends TestCase
     {
         parent::setUp();
 
-        $this->provider = $this->app->getProvider(CurrenciesServiceProvider::class);
+        $this->provider = $this->app->getProvider(ManagerServiceProvider::class);
     }
 
     public function tearDown()
@@ -45,12 +46,24 @@ class CurrenciesServiceProviderTest extends TestCase
         $expectations = [
             \Illuminate\Support\ServiceProvider::class,
             \Arcanedev\Support\ServiceProvider::class,
-            \Arcanedev\Support\PackageServiceProvider::class,
-            CurrenciesServiceProvider::class,
+            ManagerServiceProvider::class,
         ];
 
         foreach ($expectations as $expected) {
             $this->assertInstanceOf($expected, $this->provider);
         }
+    }
+
+    /** @test */
+    public function it_can_provides()
+    {
+        $expected = [
+            'arcanedev.currencies.manager',
+            \Arcanedev\Currencies\Contracts\CurrencyManager::class,
+            'arcanedev.currencies.converter',
+            \Arcanedev\Currencies\Contracts\ConverterManager::class,
+        ];
+
+        $this->assertSame($expected, $this->provider->provides());
     }
 }
