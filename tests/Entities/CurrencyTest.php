@@ -94,19 +94,29 @@ class CurrencyTest extends TestCase
         $expectations = [
             'USD' => [
                 [
-                    'amount'   => 50000,
+                    'amount'   => 99.99,
+                    'expected' => '$ 99.99'
+                ],
+                [
+                    'amount'   => 500,
                     'expected' => '$ 500.00'
-                ],[
-                    'amount'   => 100000,
+                ],
+                [
+                    'amount'   => 1000,
                     'expected' => '$ 1,000.00'
                 ]
             ],
             'EUR' => [
                 [
-                    'amount'   => 50000,
+                    'amount'   => 99.99,
+                    'expected' => '€ 99,99'
+                ],
+                [
+                    'amount'   => 500,
                     'expected' => '€ 500,00'
-                ],[
-                    'amount'   => 100000,
+                ],
+                [
+                    'amount'   => 1000,
                     'expected' => '€ 1.000,00'
                 ]
             ],

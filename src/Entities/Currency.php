@@ -105,7 +105,7 @@ class Currency implements CurrencyContract, Arrayable, ArrayAccess, Jsonable
     /**
      * Format the currency amount.
      *
-     * @param  int  $amount    -  Amount in cents
+     * @param  int  $amount
      * @param  int  $decimals
      *
      * @return string
@@ -113,7 +113,7 @@ class Currency implements CurrencyContract, Arrayable, ArrayAccess, Jsonable
     public function format($amount, $decimals = 2)
     {
         $formatted = number_format(
-            $amount / $this->subunit_to_unit,
+            $amount,
             $decimals,
             $this->decimal_separator,
             $this->thousands_separator

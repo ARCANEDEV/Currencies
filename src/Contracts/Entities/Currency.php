@@ -38,7 +38,7 @@ interface Currency
     /**
      * Format the currency amount.
      *
-     * @param  int  $amount    -  Amount in cents
+     * @param  int  $amount
      * @param  int  $decimals
      *
      * @return string
