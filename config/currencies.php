@@ -1115,8 +1115,8 @@ return [
                 'subunit_to_unit'     => 100,
                 'symbol_first'        => false,
                 'html_entity'         => '',
-                'decimal_separator'   => '.',
-                'thousands_separator' => ',',
+                'decimal_separator'   => ',',
+                'thousands_separator' => '.',
             ],
             'MDL' => [
                 'iso_numeric'         => '498',
