@@ -1,5 +1,6 @@
-<?php namespace Arcanedev\Currencies\Validators;
+<?php namespace Arcanedev\Currencies\Providers;
 
+use Arcanedev\Currencies\Validators\CurrencyValidator;
 use Arcanedev\Support\ServiceProvider;
 
 /**

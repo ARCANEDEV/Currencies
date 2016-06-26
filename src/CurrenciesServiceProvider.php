@@ -28,13 +28,6 @@ class CurrenciesServiceProvider extends PackageServiceProvider
      */
     protected $package = 'currencies';
 
-    /**
-     * Indicates if loading of the provider is deferred.
-     *
-     * @var bool
-     */
-    protected $defer = true;
-
     /* ------------------------------------------------------------------------------------------------
      |  Getters & Setters
      | ------------------------------------------------------------------------------------------------
@@ -60,10 +53,8 @@ class CurrenciesServiceProvider extends PackageServiceProvider
     {
         $this->registerConfig();
 
-        $this->registerCurrencyManager();
-        $this->registerCurrencyConverter();
-
-        $this->app->register(Validators\ValidationServiceProvider::class);
+        $this->app->register(Providers\ManagerServiceProvider::class);
+        $this->app->register(Providers\ValidationServiceProvider::class);
     }
 
     /**
@@ -73,60 +64,8 @@ class CurrenciesServiceProvider extends PackageServiceProvider
     {
         parent::boot();
 
-        $this->loadCurrencies();
-
         // Publishes
         $this->publishConfig();
         $this->publishTranslations();
-    }
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return array
-     */
-    public function provides()
-    {
-        return [
-            'arcanedev.currencies.manager',
-            Contracts\CurrencyManager::class,
-            'arcanedev.currencies.converter',
-            Contracts\ConverterManager::class,
-        ];
-    }
-
-    /* ------------------------------------------------------------------------------------------------
-     |  Other Functions
-     | ------------------------------------------------------------------------------------------------
-     */
-    private function registerCurrencyManager()
-    {
-        $this->singleton('arcanedev.currencies.manager', function ($app) {
-            /** @var \Illuminate\Contracts\Config\Repository $config */
-            $config  = $app['config'];
-
-            return new CurrencyManager($config->get('currencies'));
-        });
-
-        $this->app->bind(Contracts\CurrencyManager::class, 'arcanedev.currencies.manager');
-    }
-
-    private function registerCurrencyConverter()
-    {
-        $this->singleton('arcanedev.currencies.converter', function ($app) {
-            return new ConverterManager($app);
-        });
-
-        $this->app->bind(Contracts\ConverterManager::class, 'arcanedev.currencies.converter');
-    }
-
-    private function loadCurrencies()
-    {
-        /** @var \Illuminate\Contracts\Config\Repository $config */
-        $config  = $this->app['config'];
-
-        /** @var CurrencyManager $manager */
-        $manager = $this->app->make('arcanedev.currencies.manager');
-        $manager->load($config->get('currencies.data', []));
     }
 }
