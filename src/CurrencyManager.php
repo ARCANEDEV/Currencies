@@ -96,6 +96,16 @@ class CurrencyManager implements CurrencyManagerContract
     }
 
     /**
+     * Check if non ISO Currencies included.
+     *
+     * @return bool
+     */
+    public function isNonIsoIncluded()
+    {
+        return $this->nonIsoIncluded;
+    }
+
+    /**
      * Get the currencies collection.
      *
      * @return \Arcanedev\Currencies\Entities\CurrencyCollection
@@ -129,7 +139,7 @@ class CurrencyManager implements CurrencyManagerContract
      * @param  string      $iso
      * @param  mixed|null  $default
      *
-     * @return \Arcanedev\Currencies\Entities\Currency
+     * @return \Arcanedev\Currencies\Contracts\Entities\Currency
      */
     public function get($iso, $default = null)
     {
@@ -141,7 +151,7 @@ class CurrencyManager implements CurrencyManagerContract
      *
      * @param  string  $iso
      *
-     * @return \Arcanedev\Currencies\Entities\Currency
+     * @return \Arcanedev\Currencies\Contracts\Entities\Currency
      *
      * @throws \Arcanedev\Currencies\Exceptions\CurrencyNotFoundException
      */
@@ -168,9 +178,9 @@ class CurrencyManager implements CurrencyManagerContract
     /**
      * Format the amount.
      *
-     * @param  string  $iso
-     * @param  int     $amount
-     * @param  int     $decimals
+     * @param  string      $iso
+     * @param  double|int  $amount
+     * @param  int         $decimals
      *
      * @return string
      *
@@ -191,19 +201,5 @@ class CurrencyManager implements CurrencyManagerContract
     public function symbol($iso)
     {
         return $this->findOrFail($iso)->symbol;
-    }
-
-    /* ------------------------------------------------------------------------------------------------
-     |  Check Functions
-     | ------------------------------------------------------------------------------------------------
-     */
-    /**
-     * Check if non ISO Currencies included.
-     *
-     * @return bool
-     */
-    public function isNonIsoIncluded()
-    {
-        return $this->nonIsoIncluded;
     }
 }

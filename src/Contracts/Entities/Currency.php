@@ -38,8 +38,8 @@ interface Currency
     /**
      * Format the currency amount.
      *
-     * @param  int  $amount
-     * @param  int  $decimals
+     * @param  double|int  $amount
+     * @param  int         $decimals
      *
      * @return string
      */

@@ -105,8 +105,8 @@ class Currency implements CurrencyContract, Arrayable, ArrayAccess, Jsonable
     /**
      * Format the currency amount.
      *
-     * @param  int  $amount
-     * @param  int  $decimals
+     * @param  double|int  $amount
+     * @param  int         $decimals
      *
      * @return string
      */

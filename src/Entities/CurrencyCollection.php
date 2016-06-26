@@ -22,7 +22,7 @@ class CurrencyCollection extends Collection
      * @param  string      $iso
      * @param  mixed|null  $default
      *
-     * @return \Arcanedev\Currencies\Entities\Currency
+     * @return \Arcanedev\Currencies\Contracts\Entities\Currency
      */
     public function get($iso, $default = null)
     {
@@ -85,7 +85,7 @@ class CurrencyCollection extends Collection
      *
      * @param  string  $iso
      *
-     * @return \Arcanedev\Currencies\Entities\Currency
+     * @return \Arcanedev\Currencies\Contracts\Entities\Currency
      *
      * @throws \Arcanedev\Currencies\Exceptions\CurrencyNotFoundException
      */
