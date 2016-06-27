@@ -43,7 +43,7 @@ class RateCollection extends Collection
      *
      * @return self
      */
-    protected function setFrom($from)
+    public function setFrom($from)
     {
         $this->from = $from;
 
