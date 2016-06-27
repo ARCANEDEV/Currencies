@@ -91,12 +91,14 @@ class OpenExchangeRatesService extends AbstractService
      *
      * @throws \Arcanedev\Currencies\Exceptions\ApiException
      */
-    protected function request($from, array $to)
+    protected function request($from, array $to = [])
     {
+        $to = ( ! empty($to) && $this->proPlan) ? implode(',', $to) : null;
+
         $response = $this->client->get('/latest.json', [
             'app_id'  => $this->getAppId(),
             'base'    => $from,
-            'symbols' => $this->proPlan ? implode(',', $to) : null,
+            'symbols' => $to,
         ]);
 
         $data = json_decode($response, true);
