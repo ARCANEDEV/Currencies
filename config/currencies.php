@@ -23,6 +23,9 @@ return [
                 'api-id'   => env('OPENEXCHANGERATES_API_ID'),
                 'pro-plan' => false,
             ],
+            'currencylayer'     => [
+                'access-key' => env('CURRENCYLAYER_ACCESS_KEY')
+            ],
         ],
 
         'cache'     => [
