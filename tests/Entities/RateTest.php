@@ -99,6 +99,21 @@ class RateTest extends TestCase
     }
 
     /** @test */
+    public function it_can_reverse()
+    {
+        foreach ($this->getDummyRates() as $from => $rates) {
+            foreach ($rates as $to => $ratio) {
+                $origin     = Rate::make($from, $to, $ratio);
+                $this->rate = $origin->reverse();
+
+                $this->assertSame($origin->to(),   $this->rate->from());
+                $this->assertSame($origin->from(), $this->rate->to());
+                $this->assertNotSame($origin->ratio(), $this->rate->ratio());
+            }
+        }
+    }
+
+    /** @test */
     public function it_can_convert_rate_to_array()
     {
         foreach ($this->getDummyRates() as $from => $rates) {

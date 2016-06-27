@@ -134,6 +134,20 @@ class Rate implements RateContract, Arrayable, Jsonable
     }
 
     /**
+     * Reverse the rate.
+     *
+     * @return self
+     */
+    public function reverse()
+    {
+        return self::make(
+            $this->to(),
+            $this->from(),
+            round(1 / $this->ratio(), 6)
+        );
+    }
+
+    /**
      * Get the instance as an array.
      *
      * @return array
