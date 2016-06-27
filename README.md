@@ -22,13 +22,14 @@
 
 ## TODOS
 
-  - [ ] Documentation.
-  - [ ] 100% Code coverage + Maximum code quality.
+  - [ ] Framework agnostic package.
   - [ ] Laravel 5.3 support.
-  - [ ] Laravel 5.2 support.
-  - [ ] Laravel 5.1 support.
-  - [ ] Laravel 5.0 support.
-  - [ ] Well documented package (IDE Friendly).
+  - [x] Laravel 5.2 support.
+  - [x] Laravel 5.1 support.
+  - [x] Laravel 5.0 support.
+  - [ ] 100% Code coverage + Maximum code quality.
+  - [ ] Documentation.
+  - [ ] Well documented/phpdocs package (IDE Friendly).
 
 ## Contribution
 

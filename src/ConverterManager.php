@@ -1,6 +1,7 @@
 <?php namespace Arcanedev\Currencies;
 
 use Arcanedev\Currencies\Contracts\ConverterManager as ConverterManagerContract;
+use Illuminate\Contracts\Cache\Repository as CacheContract;
 use Illuminate\Support\Manager;
 
 /**
@@ -93,8 +94,9 @@ class ConverterManager extends Manager implements ConverterManagerContract
     protected function buildProvider($provider, array $configs)
     {
         return new $provider(
-            new \Arcanedev\Currencies\Http\Client,
-            $this->app['cache']->driver(),
+            $this->app[Contracts\CurrencyManager::class],
+            $this->app[Contracts\Http\Client::class],
+            $this->app[CacheContract::class],
             $configs
         );
     }

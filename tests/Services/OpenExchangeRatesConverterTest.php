@@ -31,8 +31,9 @@ class OpenExchangeRatesConverterTest extends TestCase
 
         $client = $this->mockHttpClient();
         $this->converter = new OpenExchangeRatesService(
+            $this->app[\Arcanedev\Currencies\Contracts\CurrencyManager::class],
             $client->reveal(),
-            $this->app['cache']->driver(),
+            $this->app[\Illuminate\Contracts\Cache\Repository::class],
             ['api-id' => 'YOUR_API_ID_HERE']
         );
     }
@@ -75,6 +76,27 @@ class OpenExchangeRatesConverterTest extends TestCase
             /** @var \Arcanedev\Currencies\Entities\Rate $rate */
             $rate = $rateCollection->get($iso);
             $this->assertSame($ratio, $rate->ratio());
+        }
+    }
+
+    /** @test */
+    public function it_can_get_supported_rates()
+    {
+        $default        = $this->converter->getDefault();
+        $supported      = $this->converter->getSupported();
+        $supportedRates = $this->converter->supportedRates();
+
+        $this->assertCount(count($supported), $supportedRates);
+        $this->assertSame($default, $supportedRates->getFrom());
+
+        foreach ($supported as $iso) {
+            $this->assertTrue($supportedRates->has($iso));
+
+            $rate = $supportedRates->get($iso);
+
+            $this->assertInstanceOf(\Arcanedev\Currencies\Contracts\Entities\Rate::class, $rate);
+            $this->assertSame($default, $rate->from());
+            $this->assertSame($iso,     $rate->to());
         }
     }
 

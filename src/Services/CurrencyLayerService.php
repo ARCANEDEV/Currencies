@@ -81,11 +81,14 @@ class CurrencyLayerService extends AbstractService
      *
      * @return \Arcanedev\Currencies\Entities\RateCollection
      */
-    protected function request($from, array $to)
+    protected function request($from, array $to = [])
     {
+        $to = empty($to) ? null : implode(',', $to);
+
         $response = $this->client->get('/live', [
             'access_key' => $this->getAccessKey(),
             'source'     => $from,
+            'currencies' => $to,
         ]);
 
         $data  = json_decode($response, true);
