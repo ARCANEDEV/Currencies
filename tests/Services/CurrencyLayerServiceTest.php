@@ -1,12 +1,12 @@
 <?php namespace Arcanedev\Currencies\Tests\Services;
 
 /**
- * Class     OpenExchangeRatesConverterTest
+ * Class     CurrencyLayerServiceTest
  *
  * @package  Arcanedev\Currencies\Tests\Services
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class OpenExchangeRatesConverterTest extends AbstractApiServiceTestCase
+class CurrencyLayerServiceTest extends AbstractApiServiceTestCase
 {
     /* ------------------------------------------------------------------------------------------------
      |  Common Functions
@@ -19,7 +19,7 @@ class OpenExchangeRatesConverterTest extends AbstractApiServiceTestCase
      */
     protected function getServiceKey()
     {
-        return 'openexchangerates';
+        return 'currencylayer';
     }
 
     /**
@@ -29,7 +29,7 @@ class OpenExchangeRatesConverterTest extends AbstractApiServiceTestCase
      */
     protected function getServiceClass()
     {
-        return \Arcanedev\Currencies\Services\OpenExchangeRatesService::class;
+        return \Arcanedev\Currencies\Services\CurrencyLayerService::class;
     }
 
     /**
@@ -40,7 +40,7 @@ class OpenExchangeRatesConverterTest extends AbstractApiServiceTestCase
     protected function getServiceConfig()
     {
         return [
-            'api-id' => 'YOUR_API_ID_HERE',
+            'access-key' => 'YOUR_ACCESS_KEY_HERE',
         ];
     }
 
@@ -51,8 +51,13 @@ class OpenExchangeRatesConverterTest extends AbstractApiServiceTestCase
      */
     protected function getApiRates()
     {
+        $rates    = [];
         $response = $this->getApiResponseFixture(true);
 
-        return $response['rates'];
+        foreach ($response['quotes'] as $key => $ratio) {
+            $rates[substr($key, 3)] = $ratio;
+        }
+
+        return $rates;
     }
 }

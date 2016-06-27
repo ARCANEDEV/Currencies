@@ -9,7 +9,7 @@ use Illuminate\Support\Arr;
  * @package  Arcanedev\Currencies\Services
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class CurrencyLayerService extends AbstractService
+class CurrencyLayerService extends AbstractApiService
 {
     /* ------------------------------------------------------------------------------------------------
      |  Properties
@@ -25,7 +25,7 @@ class CurrencyLayerService extends AbstractService
     /**
      * The Access Key.
      *
-     * @var  string
+     * @var string
      */
     protected $accessKey;
 
@@ -36,9 +36,9 @@ class CurrencyLayerService extends AbstractService
     /**
      * Set the configs.
      *
-     * @param  array $configs
+     * @param  array  $configs
      */
-    protected function setProviderConfigs(array $configs)
+    protected function setConfigs(array $configs)
     {
         $this->accessKey = Arr::get($configs, 'access-key');
     }
@@ -76,28 +76,24 @@ class CurrencyLayerService extends AbstractService
     /**
      * Make an API request.
      *
-     * @param  string $from
-     * @param  array $to
+     * @param  string  $from
+     * @param  array   $to
      *
      * @return \Arcanedev\Currencies\Entities\RateCollection
      */
     protected function request($from, array $to = [])
     {
-        $to = empty($to) ? null : implode(',', $to);
-
         $response = $this->client->get('/live', [
             'access_key' => $this->getAccessKey(),
             'source'     => $from,
-            'currencies' => $to,
+            'currencies' => empty($to) ? null : implode(',', $to),
         ]);
 
+        $rates = [];
         $data  = json_decode($response, true);
 
-        $rates = [];
-
-        foreach ($data['quotes'] as $key => $rate) {
-            $key         = preg_replace('/'.preg_quote($from, '/').'/', '', $key, 1);
-            $rates[$key] = $rate;
+        foreach ($data['quotes'] as $key => $ratio) {
+            $rates[substr($key, 3)] = $ratio;
         }
 
         return $rates;
