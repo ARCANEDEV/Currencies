@@ -143,13 +143,10 @@ abstract class AbstractService implements CurrencyService
     protected function getToCurrencies($to = null)
     {
         if (is_null($to)) {
-            return array_diff(
-                $this->getSupported(),
-                [$this->getDefault()]
-            );
+            return array_diff($this->getSupported(), [$this->getDefault()]);
         }
 
-        return $to;
+        return is_array($to) ? $to : [$to];
     }
 
     /**

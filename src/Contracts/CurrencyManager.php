@@ -100,6 +100,18 @@ interface CurrencyManager
     public function format($iso, $amount, $decimals = 2);
 
     /**
+     * Format the amount by the default iso.
+     *
+     * @param  double|int  $amount
+     * @param  int         $decimals
+     *
+     * @return string
+     *
+     * @throws \Arcanedev\Currencies\Exceptions\CurrencyNotFoundException
+     */
+    public function formatDefault($amount, $decimals = 2);
+
+    /**
      * Get the currency symbol by iso code.
      *
      * @param  string  $iso
