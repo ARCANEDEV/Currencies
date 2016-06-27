@@ -48,6 +48,11 @@ class CurrencyManagerTest extends TestCase
         foreach ($expectations as $expected) {
             $this->assertInstanceOf($expected, $this->manager);
         }
+
+        $this->assertSame(
+            $this->app['config']->get('currencies.include-non-iso'),
+            $this->manager->isNonIsoIncluded()
+        );
     }
 
     /** @test */
@@ -116,6 +121,70 @@ class CurrencyManagerTest extends TestCase
 
         foreach ($currencies as $iso => $currency) {
             $this->assertSame($currency->symbol, $this->manager->symbol($iso));
+        }
+    }
+
+    /** @test */
+    public function it_can_format()
+    {
+        $expectations = [
+            'USD' => [
+                [
+                    'amount'   => 99.99,
+                    'expected' => '$ 99.99'
+                ],
+                [
+                    'amount'   => 500,
+                    'expected' => '$ 500.00'
+                ],
+                [
+                    'amount'   => 1000,
+                    'expected' => '$ 1,000.00'
+                ]
+            ],
+            'EUR' => [
+                [
+                    'amount'   => 99.99,
+                    'expected' => '€ 99,99'
+                ],
+                [
+                    'amount'   => 500,
+                    'expected' => '€ 500,00'
+                ],
+                [
+                    'amount'   => 1000,
+                    'expected' => '€ 1.000,00'
+                ]
+            ],
+        ];
+
+        foreach ($expectations as $iso => $expectation) {
+            foreach ($expectation as $data) {
+                $this->assertSame($data['expected'], $this->manager->format($iso, $data['amount']));
+            }
+        }
+    }
+
+    /** @test */
+    public function it_can_format_by_default_currency()
+    {
+        $expectations = [
+            [
+                'amount'   => 99.99,
+                'expected' => '$ 99.99'
+            ],
+            [
+                'amount'   => 500,
+                'expected' => '$ 500.00'
+            ],
+            [
+                'amount'   => 1000,
+                'expected' => '$ 1,000.00'
+            ]
+        ];
+
+        foreach ($expectations as $data) {
+            $this->assertSame($data['expected'], $this->manager->formatDefault($data['amount']));
         }
     }
 }
