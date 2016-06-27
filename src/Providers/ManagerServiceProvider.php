@@ -2,6 +2,7 @@
 
 use Arcanedev\Currencies\Contracts\ConverterManager as ConverterManagerContract;
 use Arcanedev\Currencies\Contracts\CurrencyManager as CurrencyManagerContract;
+use Arcanedev\Currencies\Contracts\Http\Client as HttpClientContract;
 use Arcanedev\Currencies\ConverterManager;
 use Arcanedev\Currencies\CurrencyManager;
 use Arcanedev\Support\ServiceProvider;
@@ -34,6 +35,7 @@ class ManagerServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->registerHttpClient();
         $this->registerCurrencyManager();
         $this->registerCurrencyConverter();
     }
@@ -56,6 +58,8 @@ class ManagerServiceProvider extends ServiceProvider
     public function provides()
     {
         return [
+            'arcanedev.currencies.http-client',
+            HttpClientContract::class,
             'arcanedev.currencies.manager',
             CurrencyManagerContract::class,
             'arcanedev.currencies.converter',
@@ -86,6 +90,15 @@ class ManagerServiceProvider extends ServiceProvider
         });
 
         $this->app->bind(ConverterManagerContract::class, 'arcanedev.currencies.converter');
+    }
+
+    private function registerHttpClient()
+    {
+        $this->bind('arcanedev.currencies.http-client', function () {
+            return new \Arcanedev\Currencies\Http\Client;
+        });
+
+        $this->bind(HttpClientContract::class, 'arcanedev.currencies.http-client');
     }
 
     private function loadCurrencies()

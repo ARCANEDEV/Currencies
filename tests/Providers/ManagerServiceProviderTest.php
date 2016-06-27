@@ -58,6 +58,8 @@ class ManagerServiceProviderTest extends TestCase
     public function it_can_provides()
     {
         $expected = [
+            'arcanedev.currencies.http-client',
+            \Arcanedev\Currencies\Contracts\Http\Client::class,
             'arcanedev.currencies.manager',
             \Arcanedev\Currencies\Contracts\CurrencyManager::class,
             'arcanedev.currencies.converter',

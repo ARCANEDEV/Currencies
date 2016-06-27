@@ -93,7 +93,7 @@ class ConverterManager extends Manager implements ConverterManagerContract
     protected function buildProvider($provider, array $configs)
     {
         return new $provider(
-            new \Arcanedev\Currencies\Http\Client,
+            $this->app[Contracts\Http\Client::class],
             $this->app['cache']->driver(),
             $configs
         );
