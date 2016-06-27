@@ -17,13 +17,25 @@ class ConverterManager extends Manager implements ConverterManagerContract
      | ------------------------------------------------------------------------------------------------
      */
     /**
+     * Get the default driver name.
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @return string
+     */
+    public function getDefaultDriver()
+    {
+        return $this->config()->get('currencies.converters.default');
+    }
+
+    /**
      * Create an instance of Openexchangerates service.
      *
      * @return \Arcanedev\Currencies\Contracts\Services\CurrencyService
      */
     protected function createOpenexchangeratesDriver()
     {
-        return $this->buildProvider(
+        return $this->buildApiProvider(
             Services\OpenExchangeRatesService::class,
             $this->getProviderConfigs('openexchangerates')
         );
@@ -36,22 +48,24 @@ class ConverterManager extends Manager implements ConverterManagerContract
      */
     protected function createCurrencylayerDriver()
     {
-        return $this->buildProvider(
+        return $this->buildApiProvider(
             Services\CurrencyLayerService::class,
             $this->getProviderConfigs('currencylayer')
         );
     }
 
     /**
-     * Get the default driver name.
+     * Create an instance of Array store.
      *
-     * @throws \InvalidArgumentException
-     *
-     * @return string
+     * @return \Arcanedev\Currencies\Stores\ArrayStore
      */
-    public function getDefaultDriver()
+    protected function createArrayDriver()
     {
-        return $this->config()->get('currencies.converters.default');
+        return new Stores\ArrayStore(
+            $this->app[Contracts\CurrencyManager::class],
+            $this->app[CacheContract::class],
+            $this->getProviderConfigs('array')
+        );
     }
 
     /* ------------------------------------------------------------------------------------------------
@@ -91,13 +105,13 @@ class ConverterManager extends Manager implements ConverterManagerContract
      *
      * @return \Arcanedev\Currencies\Contracts\Services\CurrencyService
      */
-    protected function buildProvider($provider, array $configs)
+    protected function buildApiProvider($provider, array $configs)
     {
         return new $provider(
             $this->app[Contracts\CurrencyManager::class],
-            $this->app[Contracts\Http\Client::class],
             $this->app[CacheContract::class],
-            $configs
+            $configs,
+            $this->app[Contracts\Http\Client::class]
         );
     }
 }

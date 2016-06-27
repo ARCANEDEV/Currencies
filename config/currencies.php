@@ -26,6 +26,13 @@ return [
             'currencylayer'     => [
                 'access-key' => env('CURRENCYLAYER_ACCESS_KEY')
             ],
+            'array' => [
+                'rates' => [
+                    'USD' => 1,
+                    'EUR' => 0.90876
+                    //...
+                ],
+            ],
         ],
 
         'cache'     => [
