@@ -1,8 +1,7 @@
-<?php namespace Arcanedev\Currencies\Services;
+<?php namespace Arcanedev\Currencies\Bases;
 
 use Arcanedev\Currencies\Contracts\CurrencyManager as CurrencyManagerContract;
 use Arcanedev\Currencies\Contracts\Entities\Rate as RateContract;
-use Arcanedev\Currencies\Contracts\Http\Client as ClientContract;
 use Arcanedev\Currencies\Contracts\Services\CurrencyService;
 use Arcanedev\Currencies\Entities\RateCollection;
 use Closure;
@@ -12,7 +11,7 @@ use Illuminate\Support\Arr;
 /**
  * Class     AbstractService
  *
- * @package  Arcanedev\Currencies\Services
+ * @package  Arcanedev\Currencies\Bases
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
 abstract class AbstractService implements CurrencyService
@@ -22,21 +21,11 @@ abstract class AbstractService implements CurrencyService
      | ------------------------------------------------------------------------------------------------
      */
     /**
-     * The base URL.
+     * The currency manager instance.
      *
-     * @var string
-     */
-    protected $baseUrl = '';
-
-    /**
      * @var \Arcanedev\Currencies\Contracts\CurrencyManager
      */
     protected $manager;
-
-    /**
-     * @var \Arcanedev\Currencies\Contracts\Http\Client
-     */
-    protected $client;
 
     /**
      * The cache repository.
@@ -71,32 +60,46 @@ abstract class AbstractService implements CurrencyService
      | ------------------------------------------------------------------------------------------------
      */
     /**
-     * AbstractService constructor.
+     * AbstractApiService constructor.
      *
      * @param  \Arcanedev\Currencies\Contracts\CurrencyManager  $manager
-     * @param  \Arcanedev\Currencies\Contracts\Http\Client      $client
      * @param  \Illuminate\Contracts\Cache\Repository           $cache
      * @param  array                                            $configs
      */
     public function __construct(
         CurrencyManagerContract $manager,
-        ClientContract $client,
         CacheContract $cache,
-        array $configs = []
+        array $configs
     ) {
         $this->manager = $manager;
-        $this->client  = $client;
         $this->cache   = $cache;
+        $this->setConfigs($configs);
         $this->setCacheConfigs($configs);
-        $this->setProviderConfigs($configs);
-
-        $this->client->setBaseUrl($this->baseUrl);
     }
 
     /* ------------------------------------------------------------------------------------------------
      |  Getters & Setters
      | ------------------------------------------------------------------------------------------------
      */
+    /**
+     * Set the configs.
+     *
+     * @param  array  $configs
+     */
+    abstract protected function setConfigs(array $configs);
+
+    /**
+     * Set the cache configs.
+     *
+     * @param  array  $configs
+     */
+    protected function setCacheConfigs(array $configs)
+    {
+        $this->cacheEnabled  = Arr::get($configs, 'cache.enabled', false);
+        $this->cacheKey      = Arr::get($configs, 'cache.key', 'currencies.rates');
+        $this->cacheDuration = Arr::get($configs, 'cache.duration', 0);
+    }
+
     /**
      * Get the default currency.
      *
@@ -126,11 +129,7 @@ abstract class AbstractService implements CurrencyService
      */
     protected function getFromCurrency($from = null)
     {
-        if (is_null($from)) {
-            $from = $this->getDefault();
-        }
-
-        return $from;
+        return is_null($from) ? $this->getDefault() : $from;
     }
 
     /**
@@ -148,25 +147,6 @@ abstract class AbstractService implements CurrencyService
 
         return is_array($to) ? $to : [$to];
     }
-
-    /**
-     * Set the cache configs.
-     *
-     * @param  array  $configs
-     */
-    protected function setCacheConfigs(array $configs)
-    {
-        $this->cacheEnabled  = Arr::get($configs, 'cache.enabled', false);
-        $this->cacheKey      = Arr::get($configs, 'cache.key', 'currencies.rates');
-        $this->cacheDuration = Arr::get($configs, 'cache.duration', 0);
-    }
-
-    /**
-     * Set the configs.
-     *
-     * @param  array  $configs
-     */
-    abstract protected function setProviderConfigs(array $configs);
 
     /**
      * Get cache key.
@@ -193,26 +173,6 @@ abstract class AbstractService implements CurrencyService
      | ------------------------------------------------------------------------------------------------
      */
     /**
-     * Get currencies rates.
-     *
-     * @return \Arcanedev\Currencies\Entities\RateCollection
-     */
-    public function rates()
-    {
-        $from     = $this->getFromCurrency();
-        $self     = $this;
-        $callback = function () use ($self, $from) {
-            return $self->request($from);
-        };
-
-        $rates = $this->isCacheEnabled()
-            ? $this->cacheResults($callback)
-            : call_user_func($callback);
-
-        return $this->prepareRates($from, $rates);
-    }
-
-    /**
      * Get supported currencies rates.
      *
      * @return \Arcanedev\Currencies\Entities\RateCollection
@@ -233,23 +193,13 @@ abstract class AbstractService implements CurrencyService
      | ------------------------------------------------------------------------------------------------
      */
     /**
-     * Make an API request.
-     *
-     * @param  string  $from
-     * @param  array   $to
-     *
-     * @return \Arcanedev\Currencies\Entities\RateCollection
-     */
-    abstract protected function request($from, array $to = []);
-
-    /**
      * Cache results.
      *
-     * @param  Closure  $callback
+     * @param  \Closure  $callback
      *
      * @return array
      */
-    private function cacheResults(Closure $callback)
+    protected function cacheResults(Closure $callback)
     {
         return $this->cache->remember(
             $this->getCacheKey(),
@@ -266,7 +216,7 @@ abstract class AbstractService implements CurrencyService
      *
      * @return \Arcanedev\Currencies\Entities\RateCollection
      */
-    protected function prepareRates($from, array $rates)
+    protected function makeRatesCollection($from, array $rates)
     {
         return RateCollection::make()->load($from, $rates);
     }

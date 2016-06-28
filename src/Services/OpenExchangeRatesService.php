@@ -9,7 +9,7 @@ use Illuminate\Support\Arr;
  * @package  Arcanedev\Currencies\Services
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class OpenExchangeRatesService extends AbstractService
+class OpenExchangeRatesService extends AbstractApiService
 {
     /* ------------------------------------------------------------------------------------------------
      |  Properties
@@ -45,7 +45,7 @@ class OpenExchangeRatesService extends AbstractService
      *
      * @param  array  $configs
      */
-    protected function setProviderConfigs(array $configs)
+    protected function setConfigs(array $configs)
     {
         $this->apiId   = Arr::get($configs, 'api-id');
         $this->proPlan = Arr::get($configs, 'pro-plan', false);

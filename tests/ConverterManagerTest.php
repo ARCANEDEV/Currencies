@@ -56,7 +56,7 @@ class ConverterManagerTest extends TestCase
         $driver       = $this->manager->driver();
         $expectations = [
             \Arcanedev\Currencies\Contracts\Services\CurrencyService::class,
-            \Arcanedev\Currencies\Services\AbstractService::class,
+            \Arcanedev\Currencies\Services\AbstractApiService::class,
             \Arcanedev\Currencies\Services\OpenExchangeRatesService::class,
         ];
 
@@ -77,7 +77,7 @@ class ConverterManagerTest extends TestCase
             $driver       = $this->manager->driver($name);
             $expectations = [
                 \Arcanedev\Currencies\Contracts\Services\CurrencyService::class,
-                \Arcanedev\Currencies\Services\AbstractService::class,
+                \Arcanedev\Currencies\Services\AbstractApiService::class,
                 $serviceClass
             ];
 
