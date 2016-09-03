@@ -11,8 +11,18 @@
 [![Packagist Release][badge_release]][link-packagist]
 [![Packagist Downloads][badge_downloads]][link-packagist]
 
+A package that allows to manage & convert the currencies with ease. 
+
 *By [ARCANEDEV&copy;](http://www.arcanedev.net/)*
 
+### Features
+
+  * Well tested with maximum code quality.
+  * Easy setup &amp; configuration.
+  * Laravel `5.0 | 5.1 | 5.2 | 5.3` are supported.
+  * Well documented &amp; IDE Friendly.
+  * Made with :heart: &amp; :coffee:.
+  
 ## Table of contents
 
 1. [Requirements](_docs/1.Requirements.md)
@@ -23,13 +33,8 @@
 ## TODOS
 
   - [ ] Framework agnostic package.
-  - [ ] Laravel 5.3 support.
-  - [x] Laravel 5.2 support.
-  - [x] Laravel 5.1 support.
-  - [x] Laravel 5.0 support.
-  - [ ] 100% Code coverage + Maximum code quality.
+  - [ ] 100% Code coverage.
   - [ ] Documentation.
-  - [ ] Well documented/phpdocs package (IDE Friendly).
 
 ## Contribution
 
