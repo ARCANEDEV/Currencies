@@ -15,7 +15,7 @@ return [
      |  Converters
      | ------------------------------------------------------------------------------------------------
      */
-    'converters' => [
+    'converters'      => [
         'default'   => 'openexchangerates',
 
         'providers' => [
@@ -23,9 +23,11 @@ return [
                 'api-id'   => env('OPENEXCHANGERATES_API_ID'),
                 'pro-plan' => false,
             ],
+
             'currencylayer'     => [
                 'access-key' => env('CURRENCYLAYER_ACCESS_KEY')
             ],
+
             'array' => [
                 'rates' => [
                     'USD' => 1,
@@ -46,7 +48,7 @@ return [
      |  All currencies
      | ------------------------------------------------------------------------------------------------
      */
-    'data'      => [
+    'data'            => [
         'iso'     => [
             'AED' => [
                 'iso_numeric'         => '784',

@@ -1,7 +1,6 @@
 # Currencies [![Packagist License][badge_license]](LICENSE.md) [![Laravel 5 Supported][badge_laravel]][link-github-repo]
 
 [![Travis Status][badge_build]][link-travis]
-[![HHVM Status][badge_hhvm]][link-hhvm]
 [![Coverage Status][badge_coverage]][link-scrutinizer]
 [![Scrutinizer Code Quality][badge_quality]][link-scrutinizer]
 [![SensioLabs Insight][badge_insight]][link-insight]
@@ -11,8 +10,18 @@
 [![Packagist Release][badge_release]][link-packagist]
 [![Packagist Downloads][badge_downloads]][link-packagist]
 
+A package that allows to manage & convert the currencies with ease. 
+
 *By [ARCANEDEV&copy;](http://www.arcanedev.net/)*
 
+### Features
+
+  * Well tested with maximum code quality.
+  * Easy setup &amp; configuration.
+  * Laravel `5.0 | 5.1 | 5.2 | 5.3` are supported.
+  * Well documented &amp; IDE Friendly.
+  * Made with :heart: &amp; :coffee:.
+  
 ## Table of contents
 
 1. [Requirements](_docs/1.Requirements.md)
@@ -23,13 +32,8 @@
 ## TODOS
 
   - [ ] Framework agnostic package.
-  - [ ] Laravel 5.3 support.
-  - [x] Laravel 5.2 support.
-  - [x] Laravel 5.1 support.
-  - [x] Laravel 5.0 support.
-  - [ ] 100% Code coverage + Maximum code quality.
+  - [ ] 100% Code coverage.
   - [ ] Documentation.
-  - [ ] Well documented/phpdocs package (IDE Friendly).
 
 ## Contribution
 
@@ -47,7 +51,6 @@ If you discover any security related issues, please email arcanedev.maroc@gmail.
 [badge_laravel]:      https://img.shields.io/badge/Laravel%20supported-5.x-orange.svg?style=flat-square
 [badge_license]:      https://img.shields.io/packagist/l/arcanedev/currencies.svg?style=flat-square
 [badge_build]:        https://img.shields.io/travis/ARCANEDEV/Currencies.svg?style=flat-square
-[badge_hhvm]:         https://img.shields.io/hhvm/arcanedev/currencies.svg?style=flat-square
 [badge_coverage]:     https://img.shields.io/scrutinizer/coverage/g/ARCANEDEV/Currencies.svg?style=flat-square
 [badge_quality]:      https://img.shields.io/scrutinizer/g/ARCANEDEV/Currencies.svg?style=flat-square
 [badge_insight]:      https://img.shields.io/sensiolabs/i/49fdfa83-4d5e-473f-8b9b-26cfbbbefa92.svg?style=flat-square
@@ -62,6 +65,5 @@ If you discover any security related issues, please email arcanedev.maroc@gmail.
 [link-contributors]:  https://github.com/ARCANEDEV/Currencies/graphs/contributors
 [link-packagist]:     https://packagist.org/packages/arcanedev/currencies
 [link-travis]:        https://travis-ci.org/ARCANEDEV/Currencies
-[link-hhvm]:          http://hhvm.h4cc.de/package/arcanedev/currencies
 [link-scrutinizer]:   https://scrutinizer-ci.com/g/ARCANEDEV/Currencies/?branch=master
 [link-insight]:       https://insight.sensiolabs.com/projects/49fdfa83-4d5e-473f-8b9b-26cfbbbefa92

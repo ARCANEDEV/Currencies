@@ -15,13 +15,6 @@ class CurrenciesServiceProvider extends PackageServiceProvider
      | ------------------------------------------------------------------------------------------------
      */
     /**
-     * Vendor name.
-     *
-     * @var string
-     */
-    protected $vendor  = 'arcanedev';
-
-    /**
      * Package name.
      *
      * @var string
