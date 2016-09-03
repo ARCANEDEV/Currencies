@@ -103,11 +103,13 @@ class ManagerServiceProvider extends ServiceProvider
 
     private function loadCurrencies()
     {
-        /** @var \Illuminate\Contracts\Config\Repository $config */
+        /**
+         * @var \Arcanedev\Currencies\Contracts\CurrencyManager  $manager
+         * @var \Illuminate\Contracts\Config\Repository          $config
+         */
+        $manager = $this->app->make(CurrencyManagerContract::class);
         $config  = $this->app['config'];
 
-        /** @var CurrencyManagerContract $manager */
-        $manager = $this->app->make('arcanedev.currencies.manager');
         $manager->load($config->get('currencies.data', []));
     }
 }
